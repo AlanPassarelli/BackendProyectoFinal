@@ -10,7 +10,7 @@ import cookieParser from 'cookie-parser';
 import router from './routers/index.routes.js';
 import {__dirname} from "./utils.js";
 
-const whitelist = ['http://localhost:5173']
+const whitelist = ["http://127.0.0.1:5173", "http://localhost:5173"];
 
 const corsOptions = {
  origin:function(origin,callback) {
