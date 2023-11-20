@@ -9,7 +9,7 @@ function generateMockProducts(count) {
       description: faker.commerce.productDescription(),
       code: faker.database.mongodbObjectId(),
       price: parseFloat(faker.commerce.price()),
-      stock: faker.number.binary({ min: 1, max: 100 }),
+      stock: faker.number.int({ min: 1, max: 100 }),
       category: faker.commerce.department(),
     };
     productsMoking.push(product);
