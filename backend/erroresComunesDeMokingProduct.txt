@@ -1,0 +1,23 @@
+1.Campos faltantes o mal formateados al crear un producto
+
+2.Producto ya existente con el mismo nombre o identificador único
+
+3.Errores de validación en los datos del carrito
+
+4.Inventario insuficiente al agregar un producto al carrito
+
+5.Errores de conexión con la base de datos
+
+6.Errores en las rutas y controladores
+
+7.Sesión de usuario no autenticada o expirada cuando estoy crando la compra
+
+8.Límites en la cantidad de productos en el carrito
+
+9.Errores en la lógica de precios o descuento
+
+10.Problemas con la disponibilidad del producto
+
+11.Errores al calcular el total del carrito
+
+12.Errores de integración con sistemas de pago

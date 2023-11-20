@@ -9,7 +9,7 @@ import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 import router from './routers/index.routes.js';
 import {__dirname} from "./utils.js";
-
+import RouterMoking from './routers/mokingProduct.routes.js';
 const whitelist = ["http://127.0.0.1:5173", "http://localhost:5173"];
 
 const corsOptions = {
@@ -75,4 +75,5 @@ app.use(passport.session())
 //Routes
 
 app.use ('/', router)
+app.use ('/', RouterMoking)
 
