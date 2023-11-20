@@ -75,5 +75,5 @@ app.use(passport.session())
 //Routes
 
 app.use ('/', router)
-app.use ('/', RouterMoking)
+
 
