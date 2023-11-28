@@ -1,4 +1,5 @@
 import express from 'express';
+
 import 'dotenv/config'
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -10,6 +11,7 @@ import cookieParser from 'cookie-parser';
 import router from './routers/index.routes.js';
 import {__dirname} from "./utils.js";
 import RouterMoking from './routers/mokingProduct.routes.js';
+import { addLogger } from './utils/logger.js';
 const whitelist = ["http://127.0.0.1:5173", "http://localhost:5173"];
 
 const corsOptions = {
@@ -76,4 +78,26 @@ app.use(passport.session())
 
 app.use ('/', router)
 
+//Routes Logger
 
+app.use(addLogger)
+
+app.get('/info', (req,res) => { 
+    req.logger.info("Info")
+    res.send("Hola")
+})
+
+app.get('/warning', (req,res) => { 
+    req.logger.warning("warning")
+    res.send("Hola")
+})
+
+app.get('/error', (req,res) => { 
+    req.logger.error("error")
+    res.send("Hola")
+})
+
+app.get('/fatal', (req,res) => { 
+    req.logger.fatal("fatal")
+    res.send("Hola")
+})
