@@ -1,5 +1,4 @@
 import express from 'express';
-
 import 'dotenv/config'
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -12,7 +11,9 @@ import router from './routers/index.routes.js';
 import {__dirname} from "./utils.js";
 import RouterMoking from './routers/mokingProduct.routes.js';
 import { addLogger } from './utils/logger.js';
-const whitelist = ["http://127.0.0.1:5173", "http://localhost:5173"];
+import swaggerJSDOc from 'swagger-jsdoc'
+import swaggerUiExpress from 'swagger-ui-express'
+const whitelist = ["http://127.0.0.1:5173", "http://localhost:5173","http://localhost:8081"];
 
 const corsOptions = {
  origin:function(origin,callback) {
@@ -27,7 +28,19 @@ const corsOptions = {
 const app = express();
 const PORT = process.env.PORT || 8081
 
+const swaggerOptions = {
+   definition: {
+    openapi: '3.1.0',
+    info: {
+        title: "documentencion del curso de Backend",
+        description: "API Coder Backend"
+    },
+   },
+   apis: [`${__dirname}/docs/**/*.yaml`]
+}
 
+const specs = swaggerJSDOc (swaggerOptions)
+app.use('/apidocs', swaggerUiExpress.serve,swaggerUiExpress.setup (specs))
 //BDD
 mongoose.connect(process.env.MONGO_URL)
     .then(async () => {
