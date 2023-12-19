@@ -6,7 +6,9 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Products from './components/Products';
 import NavBar from './components/NavBar/Navbar';
-
+import ResetPasswordPage from "./components/ResetPasswordPage/ResetPasswordPage";
+import ResetPasswordRequest from "./components/ResetPasswordRequest/ResetPasswordRequest";
+import ResetPasswordConfirm from "./components/ResetPasswordConfirm/ResetPasswordConfirm";
 
 
 export const App = () => {
@@ -21,7 +23,18 @@ export const App = () => {
       <Route path='/login' element={<Login/>}/>
       <Route path='/newproducts' element={<NewProducts/>}/>
       <Route path='/products' element={<Products/>}/>
-  
+      <Route
+            path="/reset-password-request"
+            element={<ResetPasswordRequest />}
+          />
+          <Route
+            path="/reset-password-confirm"
+            element={<ResetPasswordConfirm />}
+          />
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPasswordPage />}
+          />
       </Routes>
       </BrowserRouter>
     </>

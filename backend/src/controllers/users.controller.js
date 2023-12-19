@@ -1,4 +1,5 @@
 import { userModel } from "../dao/models/users.models.js";
+import nodemailer from "nodemailer";
 
 export const getUser = async (req, res) => {
     try {
@@ -53,3 +54,37 @@ export const userDelete = async (req, res) => {
         res.status(400).send({ respuesta: 'Error en eliminar usuario', mensaje: error })
     }
 }
+
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "alan.g.passarelli@gmail.com",
+      pass: process.env.PASSWORD_EMAIL,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+  
+  export const sendPasswordResetEmail = async (userEmail) => {
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    // Guarda resetToken en la base de datos junto con el correo del usuario y una marca de tiempo
+  
+    const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+  
+    const mailOptions = {
+      from: "correomcoc@gmail.com",
+      to: userEmail,
+      subject: "Restablecimiento de Contraseña",
+      html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña: <a href="${resetLink}">Restablecer Contraseña</a></p>`,
+    };
+  
+    await transporter.sendMail(mailOptions);
+  };
+  
+  export const getUserByEmail = async (email) => {
+    return userModel.findOne({ email });
+  };

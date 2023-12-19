@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate,Link } from "react-router-dom"
 export const Login = () => {
 
   const formRef = useRef(null)
@@ -39,8 +39,9 @@ export const Login = () => {
             <input type="password" name="password" className="form-control" />
         </div>
         <button type="submit" className="btn btn-secondary">Iniciar Sesion</button>
-    </form>
 
+    </form>
+        <Link to="/reset-password-request">Olvidé mi contraseña</Link>
 </div>
   )
 }
