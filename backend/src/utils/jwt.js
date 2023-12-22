@@ -19,7 +19,7 @@ export const generateToken = (user) => {
 export const authToken = (req,res, next) => {
     //Consultar al header para obtener el token
 
-    const authHeader = req.headers.Authorization
+    const authHeader = req.headers.Authorization;
 
     if (!authHeader) {
         return res.status(401).send({error: 'Usuario no autenticado'})
@@ -35,6 +35,6 @@ export const authToken = (req,res, next) => {
 
     //Usuario valido
 
-    req.user = credential.user
-    next ()
-}
+    req.user = credential.user;
+    next ();
+};

@@ -13,7 +13,7 @@ import RouterMoking from './routers/mokingProduct.routes.js';
 import { addLogger } from './utils/logger.js';
 import swaggerJSDOc from 'swagger-jsdoc'
 import swaggerUiExpress from 'swagger-ui-express'
-const whitelist = ["http://127.0.0.1:5173", "http://localhost:5173","http://localhost:8081"];
+const whitelist = ["http://127.0.0.1:5173", "http://localhost:5173"];
 
 const corsOptions = {
  origin:function(origin,callback) {
@@ -22,7 +22,8 @@ const corsOptions = {
  }else {
     callback(new Error ("Acceso denegado"))
  }
- }
+ },
+ credentials: true,
 }
 
 const app = express();
