@@ -76,7 +76,7 @@ const transporter = nodemailer.createTransport({
     const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
   
     const mailOptions = {
-      from: "correomcoc@gmail.com",
+      from: "alan.g.passarelli@gmail.com",
       to: userEmail,
       subject: "Restablecimiento de Contraseña",
       html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña: <a href="${resetLink}">Restablecer Contraseña</a></p>`,

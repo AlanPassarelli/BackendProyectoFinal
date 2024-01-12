@@ -1,94 +1,183 @@
 import { productsModel } from "../dao/models/products.model.js";
 
+import EError from "../services/errors/enum.js";
+import CustomError from "../services/errors/CustomError.js";
+
 export const getProducts = async (req, res) => {
-    const { limit, page, filter, sort } = req.query
+  const { limit, page, filter, sort } = req.query;
 
-    const pag = page ? page : 1
-    const lim = limit ? limit : 10
-    const ord = sort == 'asc' ? 1 : -1
+  const pag = page ? page : 1;
+  const lim = limit ? limit : 100;
+  const ord = sort == "asc" ? 1 : -1;
 
-    try {
-        const prods = await productsModel.paginate({ filter: filter }, { limit: lim, page: pag, sort: { price: ord } })
+  try {
+    const products = await productsModel.paginate(
+      { filter: filter },
+      { limit: lim, page: pag, sort: { price: ord } }
+    );
 
-        if (prods) {
-            return res.status(200).send(prods)
-        } else {
-            res.status(404).send({ error: "Productos no encontrados" })
-        }
-    } catch (error) {
-        res.status(500).send({ error: `Error en consultar productos ${error}` })
+    if (products.docs.length > 0) {
+      return res.status(200).send(products);
     }
-}
 
+    res.status(404).send({
+      error: CustomError.createError({
+        name: "NotFoundError",
+        message: "Productos no encontrados",
+        code: EError.NOT_FOUND_ERROR,
+      }),
+    });
+  } catch (error) {
+    res.status(500).send({
+      error: CustomError.createError({
+        name: "DatabaseError",
+        message: `Error en consultar productos: ${error.message}`,
+        code: EError.DATABASE_ERROR,
+        cause: error,
+      }),
+    });
+  }
+};
 
-export const getProductsById = async (req, res) => {
-    const { id } = req.params
+export const getProduct = async (req, res) => {
+  const { id } = req.params;
 
-    try {
-        const prod = await productsModel.findById(id)
+  try {
+    const product = await productsModel.findById(id);
 
-        if (prod) {
-            return res.status(200).send(prod)
-        } else {
-            res.status(404).send({ error: "Producto no encontrado" })
-        }
-    } catch (error) {
-        res.status(500).send({ error: `Error en consultar producto ${error}` })
+    if (product) {
+      return res.status(200).send(product);
     }
-}
 
+    res.status(404).send({
+      error: CustomError.createError({
+        name: "NotFoundError",
+        message: "Producto no encontrado",
+        code: EError.NOT_FOUND_ERROR,
+      }),
+    });
+  } catch (error) {
+    res.status(500).send({
+      error: CustomError.createError({
+        name: "DatabaseError",
+        message: `Error en consultar producto: ${error.message}`,
+        code: EError.DATABASE_ERROR,
+        cause: error,
+      }),
+    });
+  }
+};
 
 export const postProduct = async (req, res) => {
-    const { title, description, code, price, stock, category } = req.body
+  const { title, description, code, price, stock, category } = req.body;
+  const userId = req.user._id; // Obtén el ID del usuario actual desde la sesión
+  const userRole = req.user.role;
 
-    try {
-        const prod = await productsModel.create({ title, description, code, price, stock, category })
+  try {
+    const newProduct = await productsModel.create({
+      title,
+      description,
+      code,
+      price,
+      stock,
+      category,
+      owner: userRole === "premium" ? userId : "admin", // Asignar el owner según el rol del usuario
+    });
 
-        if (prod) {
-            return res.status(201).send(prod)
-        } else {
-            res.status(400).send({ error: "Error en crear producto" })
-        }
-    } catch (error) {
-        if (error.code == 11000) {
-            res.status(400).send({ error: "Producto ya creado con llave duplicada" })
-        } else {
-            res.status(500).send({ error: `Error en crear producto ${error}` })
-        }
+    if (newProduct) {
+      return res.status(201).send(newProduct);
     }
-}
-
-
-export const putProductsById = async (req, res) => {
-    const { id } = req.params
-    const { title, description, code, price, stock, category } = req.body
-
-    try {
-        const prod = await productsModel.findByIdAndUpdate(id, { title, description, code, price, stock, category })
-
-        if (prod) {
-            return res.status(200).send(prod)
-        } else {
-            res.status(404).send({ error: "Producto no encontrado" })
-        }
-    } catch (error) {
-        res.status(500).send({ error: `Error en actualizar producto ${error}` })
+    res.status(400).send({
+      error: CustomError.createError({
+        name: "ValidationError",
+        message: "Error en crear producto",
+        code: EError.VALIDATION_ERROR,
+      }),
+    });
+  } catch (error) {
+    if (error.code == 11000) {
+      // Código para clave duplicada
+      return res.status(400).send({
+        error: CustomError.createError({
+          name: "ValidationError",
+          message: "Producto ya creado con clave duplicada",
+          code: EError.VALIDATION_ERROR,
+        }),
+      });
     }
-}
+    res.status(500).send({
+      error: CustomError.createError({
+        name: "DatabaseError",
+        message: `Error en crear producto: ${error.message}`,
+        code: EError.DATABASE_ERROR,
+        cause: error,
+      }),
+    });
+  }
+};
 
+export const putProduct = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, code, price, stock, category } = req.body;
 
-export const deleteProductById = async (req, res) => {
-    const { id } = req.params
+  try {
+    const updatedProduct = await productModel.findByIdAndUpdate(id, {
+      title,
+      description,
+      code,
+      price,
+      stock,
+      category,
+    });
 
-    try {
-        const prod = await productsModel.findByIdAndDelete(id)
-
-        if (prod) {
-            return res.status(200).send(prod)
-        } else {
-            res.status(404).send({ error: "Producto no encontrado" })
-        }
-    } catch (error) {
-        res.status(500).send({ error: `Error en eliminar producto ${error}` })
+    if (updatedProduct) {
+      return res.status(200).send(updatedProduct);
     }
-}
+
+    res.status(404).send({
+      error: CustomError.createError({
+        name: "NotFoundError",
+        message: "Producto no encontrado",
+        code: EError.NOT_FOUND_ERROR,
+      }),
+    });
+  } catch (error) {
+    res.status(500).send({
+      error: CustomError.createError({
+        name: "DatabaseError",
+        message: `Error en actualizar el producto: ${error.message}`,
+        code: EError.DATABASE_ERROR,
+        cause: error,
+      }),
+    });
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedProduct = await productsModel.findByIdAndDelete(id);
+
+    if (deletedProduct) {
+      return res.status(200).send(deletedProduct);
+    }
+
+    res.status(404).send({
+      error: CustomError.createError({
+        name: "NotFoundError",
+        message: "Producto no encontrado",
+        code: EError.NOT_FOUND_ERROR,
+      }),
+    });
+  } catch (error) {
+    res.status(500).send({
+      error: CustomError.createError({
+        name: "DatabaseError",
+        message: `Error en eliminar producto: ${error.message}`,
+        code: EError.DATABASE_ERROR,
+        cause: error,
+      }),
+    });
+  }
+};

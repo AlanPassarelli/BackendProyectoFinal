@@ -1,13 +1,38 @@
 import { Router } from 'express';
-import { getProducts, getProductsById, postProduct, putProductsById, deleteProductById } from "../controllers/products.controller.js";
-import { passportError, authorization } from "../utils/messagesError.js";
-
-const routerP = Router()
-
-routerP.get('/', getProducts)
-routerP.get('/:id', getProductsById)
-routerP.post('/', passportError('jwt'), authorization('admin'), postProduct)
-routerP.put('/:id', passportError('jwt'), authorization('admin'), putProductsById)
-routerP.delete('/:id', passportError('jwt'), authorization('admin'), deleteProductById)
-
-export default routerP
+import {
+    getProducts,
+    getProduct,
+    deleteProduct,
+    putProduct,
+    postProduct,
+  } from "../controllers/products.controller.js";
+  import { authorization, passportError } from '../utils/messagesError.js';
+  
+  const productosRouter = Router();
+  
+  productosRouter.get("/", getProducts);
+  
+  productosRouter.get("/:id", getProduct);
+  
+  productosRouter.put(
+    "/:id",
+    passportError("jwt"),
+    authorization("admin", "premium"),
+    putProduct
+  );
+  
+  productosRouter.delete(
+    "/:id",
+    passportError("jwt"),
+    authorization("admin", "premium"),
+    deleteProduct
+  );
+  
+  productosRouter.post(
+    "/",
+    passportError("jwt"),
+    authorization("admin", "premium"),
+    postProduct
+  );
+  
+  export default productosRouter;

@@ -33,8 +33,15 @@ const userSchema = new Schema({
     cart: {
         type: Schema.Types.ObjectId,
         ref: 'cart'
-    }
+    },
+
+    documents: [{
+        name: String,
+        reference: String
+      }],
+      last_connection: Date
 })
+
 
 userSchema.plugin(paginate) //Implementar el metodo paginate en el schema
 

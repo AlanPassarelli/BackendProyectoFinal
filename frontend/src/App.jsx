@@ -1,42 +1,52 @@
-import {BrowserRouter,Route,Routes} from 'react-router-dom'
-import { Register } from './components/register'
-import { Login } from './components/login'
-import { NewProducts } from './components/NewProducts'
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginRegister from "./components/LoginRegister/LoginRegister";
+import NewProduct from "./components/NewProduct/NewProduct";
+import NavBar from "./components/NavBar/NavBar";
+import Products from "./components/Products/Products";
+import { CartProvider } from "./components/context/cartContext";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Products from './components/Products';
-import NavBar from './components/NavBar/Navbar';
+import { LogProvider } from "./components/LogContext";
+import ProductDetail from "./components/ProductDetail/ProductDetail";
+import ShoppingBag from "./components/ShoppingBag/ShoppingBag";
+import Home from "./components/Home/Home";
 import ResetPasswordPage from "./components/ResetPasswordPage/ResetPasswordPage";
 import ResetPasswordRequest from "./components/ResetPasswordRequest/ResetPasswordRequest";
 import ResetPasswordConfirm from "./components/ResetPasswordConfirm/ResetPasswordConfirm";
+import ConfirmPasswordChange from "./components/ConfirmPasswordChange/ConfirmPasswordChange";
 
-
-export const App = () => {
+function App() {
   return (
-    <>
-      <NavBar/>
-      <BrowserRouter>
-      <Routes>
-  
-      <Route path="/" element={<Products />} />
-      <Route path='/register' element={<Register/>} />
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/newproducts' element={<NewProducts/>}/>
-      <Route path='/products' element={<Products/>}/>
-      <Route
-            path="/reset-password-request"
-            element={<ResetPasswordRequest />}
-          />
-          <Route
-            path="/reset-password-confirm"
-            element={<ResetPasswordConfirm />}
-          />
-          <Route
-            path="/reset-password/:token"
-            element={<ResetPasswordPage />}
-          />
-      </Routes>
-      </BrowserRouter>
-    </>
-  )
+    <LogProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/usuario" element={<LoginRegister />} />
+            <Route path="/new-product" element={<NewProduct />} />
+            <Route path="/productos" element={<Products />} />
+            <Route path="/productdetail/:id" element={<ProductDetail />} />
+            <Route path="/carts" element={<ShoppingBag />} />
+            <Route
+              path="/reset-password-request"
+              element={<ResetPasswordRequest />}
+            />
+            <Route
+              path="/reset-password-confirm"
+              element={<ResetPasswordConfirm />}
+            />
+            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+            <Route
+              path="/confirm-password-change"
+              element={<ConfirmPasswordChange />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
+    </LogProvider>
+  );
 }
+
+export default App;

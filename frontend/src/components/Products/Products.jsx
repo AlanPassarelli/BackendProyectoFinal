@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import ProductCard from "./Products/ProductCard";
+import ProductCard from "../ProductCard/ProductCard";
 import { Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const Products = () => {
   const [productos, setProductos] = useState([]);
@@ -19,10 +20,8 @@ const Products = () => {
           <ProductCard key={producto._id} {...producto} />
         ))}
       </Row>
-      
     </div>
   );
 };
 
 export default Products;
-

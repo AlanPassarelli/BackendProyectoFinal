@@ -11,7 +11,8 @@ import router from './routers/index.routes.js';
 import {__dirname} from "./utils.js";
 import RouterMoking from './routers/mokingProduct.routes.js';
 import { addLogger } from './utils/logger.js';
-import swaggerJSDOc from 'swagger-jsdoc'
+import swaggerJSDOc from 'swagger-jsdoc';
+import multer from 'multer';
 import swaggerUiExpress from 'swagger-ui-express'
 const whitelist = ["http://127.0.0.1:5173", "http://localhost:5173"];
 
@@ -115,3 +116,32 @@ app.get('/fatal', (req,res) => {
     req.logger.fatal("fatal")
     res.send("Hola")
 })
+
+
+const profileStorage = multer.diskStorage({
+    destination: 'uploads/profiles/',
+    filename: (req, file, cb) => {
+      // Lógica para generar nombre de archivo único
+      cb(null, file.originalname);
+    }
+  });
+  
+  const productStorage = multer.diskStorage({
+    destination: 'uploads/products/',
+    filename: (req, file, cb) => {
+      // Lógica para generar nombre de archivo único
+      cb(null, file.originalname);
+    }
+  });
+  
+  const documentsStorage = multer.diskStorage({
+    destination: 'uploads/documents/',
+    filename: (req, file, cb) => {
+      // Lógica para generar nombre de archivo único
+      cb(null, file.originalname);
+    }
+  });
+  
+  const uploadProfile = multer({ storage: profileStorage });
+  const uploadProduct = multer({ storage: productStorage });
+  const uploadDocuments = multer({ storage: documentsStorage });

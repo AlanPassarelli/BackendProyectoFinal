@@ -1,41 +1,51 @@
-import { Ticket } from "../dao/models/ticket.model.js";
+import { cartModel } from "../dao/models/carts.model.js";
+import { ticketModel } from "../dao/models/ticket.model.js";
+import { productsModel } from "../dao/models/products.model.js";
 
-// Controlador para crear un nuevo ticket
-export const createTicket = async (req, res) => {
-  try {
-    const { code, amount, purchaser } = req.body;
-    const ticket = new Ticket({ code, amount, purchaser });
-    const newTicket = await ticket.save();
-    res.status(201).json(newTicket);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al crear el ticket', details: error.message });
-  }
-};
+export const postCompra = async (req, res) => {
+  const cartId = req.params.cid;
 
-// Controlador para obtener todos los tickets
-export const getAllTickets = async (req, res) => {
   try {
-    const tickets = await Ticket.find();
-    res.status(200).json(tickets);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los tickets', details: error.message });
-  }
-};
-
-// Controlador para obtener un ticket por su código único
-export const getTicketByCode = async (req, res) => {
-  try {
-    const code = req.params.code;
-    const ticket = await Ticket.findOne({ code });
-    
-    if (ticket) {
-      res.status(200).json(ticket);
-    } else {
-      res.status(404).json({ error: 'Ticket no encontrado' });
+    const cart = await cartModel.findById(cartId).populate("items.product");
+    if (!cart) {
+      return res.status(404).json({ message: "Carrito no encontrado" });
     }
+
+    const productsNotProcessed = []; // aca se almacenan los productos que no se pudieron procesar
+
+    for (const item of cart.items) {
+      const product = item.product;
+      const requestedQuantity = item.quantity;
+
+      if (product.stock >= requestedQuantity) {
+        // El producto tiene suficiente stock, restarlo
+        product.stock -= requestedQuantity;
+        await product.save();
+      } else {
+        // si el producto no tiene suficiente stock se almacenan en los no procesados
+        productsNotProcessed.push(product._id);
+      }
+    }
+
+    // se actualiza el carrito con los productos no procesados
+    cart.items = cart.items.filter(
+      (cartItem) => !productsNotProcessed.includes(cartItem.product._id)
+    );
+    await cart.save();
+
+    // se crea un ticket con los datos de la compra
+    const ticket = new ticketModel({
+      amount: cart.total, // Supongo que el carrito tiene un campo total
+      purchaser: cart.userEmail, // O donde se almacena el correo del usuario
+    });
+    await ticket.save();
+
+    return res.status(200).json({
+      message: "Compra finalizada exitosamente",
+      productsNotProcessed: productsNotProcessed,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el ticket', details: error.message });
+    console.error(error);
+    return res.status(500).json({ message: "Error al procesar la compra" });
   }
 };
-
-

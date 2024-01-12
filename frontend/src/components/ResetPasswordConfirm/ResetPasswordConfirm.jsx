@@ -1,5 +1,3 @@
-// ResetPasswordConfirm.jsx
-
 import React from "react";
 
 const ResetPasswordConfirm = () => {

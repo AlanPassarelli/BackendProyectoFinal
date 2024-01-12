@@ -9,6 +9,12 @@ const ResetPasswordPage = () => {
 
   const handleResetPassword = async () => {
     try {
+      // Validar que las contraseñas sean iguales
+      if (newPassword !== confirmPassword) {
+        console.error("Las contraseñas no coinciden");
+        return;
+      }
+
       const response = await fetch(
         `http://localhost:8081/api/reset-password/${token}`,
         {
@@ -22,9 +28,9 @@ const ResetPasswordPage = () => {
 
       if (response.status === 200) {
         // Restablecimiento exitoso, puedes redirigir a la página de inicio de sesión u otra página
-        navigate("/usuario"); // Ajusta la ruta según tus necesidades
+        navigate("/confirm-password-change"); // Ajusta la ruta según tus necesidades
       } else {
-        // Manejar errores, por ejemplo, mostrar un mensaje de error al usuario
+        // Manejar otros casos de error, por ejemplo, mostrar un mensaje de error al usuario
       }
     } catch (error) {
       console.error("Error al restablecer la contraseña:", error);

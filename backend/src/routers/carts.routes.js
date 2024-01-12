@@ -1,12 +1,32 @@
-import { Router } from 'express';
-import { getCart, postCart } from '../controllers/carts.controller.js';
-import { finalizePurchase } from '../controllers/finalizePurchase.controller.js';
-const routerC = Router()
+import { Router } from "express";
+import {
+  getCarrito,
+  getCarritoById,
+  postCarrito,
+  postCarritoByProductId,
+  deleteById,
+  putCarritoByProducId,
+  deleteProductById,
+  putCarrito,
+  postCompra,
+} from "../controllers/carts.controller.js";
+
+const cartsRouter = Router();
+
+cartsRouter.get("/", getCarrito);
+cartsRouter.post("/", postCarrito);
+
+cartsRouter.get("/:cid", getCarritoById);
+cartsRouter.put("/:cid", putCarrito);
+
+cartsRouter.delete("/:id", deleteById);
+
+cartsRouter.post("/:cid/products/:pid", postCarritoByProductId);
+cartsRouter.delete("/:cid/products/:pid", deleteProductById);
+cartsRouter.put("/:cid/products/:pid", putCarritoByProducId);
+
+cartsRouter.post("/:cid/purchase", postCompra);
 
 
-routerC.get('/:id', getCart)
-routerC.post('/:cid/products/:pid', postCart)
-routerC.post('/:cid/purchase', finalizePurchase);
 
-
-export default routerC
+export default cartsRouter;
