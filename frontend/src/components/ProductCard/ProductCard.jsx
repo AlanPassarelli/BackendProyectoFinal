@@ -11,7 +11,7 @@ const ProductCard = ({
 }) => {
   return (
     <Col sm={12} md={6} lg={6} xl={4}>
-      <div className="card product-card m-1" /* style="width: 18rem" */>
+      <div className="card product-card m-1">
         <Link to={`/productdetail/${_id}`} key={_id}>
           <img
             src={thumbnails[0]}

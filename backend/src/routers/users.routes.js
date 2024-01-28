@@ -15,6 +15,7 @@ userRouter.delete('/:id',userDelete )
 
 userRouter.post('/:uid/documents', uploadDocuments);
 
-userRouter.put('/:uid/premium', updatePremium)
+userRouter.put('/:uid/premium', updatePremium);
+
 
 export default userRouter

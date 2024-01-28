@@ -4,7 +4,7 @@ import LoginRegister from "./components/LoginRegister/LoginRegister";
 import NewProduct from "./components/NewProduct/NewProduct";
 import NavBar from "./components/NavBar/NavBar";
 import Products from "./components/Products/Products";
-import { CartProvider } from "./components/context/cartContext";
+
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { LogProvider } from "./components/LogContext";
@@ -15,11 +15,15 @@ import ResetPasswordPage from "./components/ResetPasswordPage/ResetPasswordPage"
 import ResetPasswordRequest from "./components/ResetPasswordRequest/ResetPasswordRequest";
 import ResetPasswordConfirm from "./components/ResetPasswordConfirm/ResetPasswordConfirm";
 import ConfirmPasswordChange from "./components/ConfirmPasswordChange/ConfirmPasswordChange";
+import 'react-toastify/dist/ReactToastify.css';
+import { CarritoProvider } from "./components/CarritoContext";
+import VistaAdministrador from "./components/VistaAdministrador/VistaAdministrador";
+
 
 function App() {
   return (
     <LogProvider>
-      <CartProvider>
+<CarritoProvider>
         <BrowserRouter>
           <NavBar />
           <Routes>
@@ -28,7 +32,7 @@ function App() {
             <Route path="/new-product" element={<NewProduct />} />
             <Route path="/productos" element={<Products />} />
             <Route path="/productdetail/:id" element={<ProductDetail />} />
-            <Route path="/carts" element={<ShoppingBag />} />
+            <Route path="/carrito" element={<ShoppingBag />} />
             <Route
               path="/reset-password-request"
               element={<ResetPasswordRequest />}
@@ -37,14 +41,18 @@ function App() {
               path="/reset-password-confirm"
               element={<ResetPasswordConfirm />}
             />
-            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+            <Route
+              path="/reset-password/:token"
+              element={<ResetPasswordPage />}
+            />
             <Route
               path="/confirm-password-change"
               element={<ConfirmPasswordChange />}
             />
+             <Route path="/admin" element={<VistaAdministrador/>} />
           </Routes>
         </BrowserRouter>
-      </CartProvider>
+</CarritoProvider>
     </LogProvider>
   );
 }

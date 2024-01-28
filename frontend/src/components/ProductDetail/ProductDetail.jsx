@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+// ProductDetail.jsx
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useCart } from "../context/cartContext";
 import "./ProductDetail.scss";
+import { useCarrito } from "../CarritoContext";
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const { addToCart } = useCart();
+  const { addToCarrito } = useCarrito();
   const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     fetch(`http://localhost:8081/api/products/${id}`)
@@ -15,34 +17,56 @@ const ProductDetail = () => {
         setProduct(data);
       })
       .catch((error) => {
-        console.log("Fetch error:", error);
+        console.error("Fetch error:", error);
       });
   }, [id]);
 
   const handleAddToCart = () => {
-    addToCart(product);
-    console.log("Product added to cart:", product);
-  };
+    // Verifica si el producto tiene un ID válido antes de agregarlo al carrito
+    if (product && (product.id || product._id)) {
+      // Usa el campo correcto del servidor para obtener el ID del producto
+      const productId = product.id || product._id;
 
+      // Crea un objeto que representa el producto con la cantidad seleccionada
+      const productToAdd = {
+        id: productId,
+        title: product.title,
+        price: product.price,
+        quantity: quantity,
+        thumbnails: product.thumbnails,
+      };
+
+      // Llama a la función addToCarrito del contexto para agregar el producto al carrito
+      addToCarrito(productToAdd);
+
+      // Puedes agregar lógica adicional, como mostrar una notificación de éxito
+      console.log('Producto agregado al carrito:', productToAdd);
+    } else {
+      console.error("El producto no tiene un ID válido");
+    }
+  };
 
   return (
     <section className="productdetail">
-      <div className="card mb-3 " /* style="max-width: 540px;" */>
+      <div className="card mb-3">
         <div className="row g-0">
           <div className="col-md-4">
-            <img
-              src={product.thumbnails && product.thumbnails[0]}
-              className="img-fluid rounded-start"
-              alt={product.title}
-            />
+            <img src={product.thumbnails && product.thumbnails[0]} alt={product.title} className="img-fluid rounded-start" />
           </div>
           <div className="col-md-8">
             <div className="card-body">
-              <h5 className="card-title">{product.title}</h5>
+            <h5 className="card-title">{product.title}</h5>
               <p className="card-text">{product.description}</p>
               <p className="card-text">Precio: ${product.price}</p>
               <p className="card-text">Precio: ${product.stock}</p>
-              <button className="CartBoton mx-auto " onClick={handleAddToCart}>
+            <div className="quantity-container">
+          <label>Cantidad:</label>
+          <input
+            type="number"
+            value={quantity}
+            onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value)))}
+          />
+          <button className="CartBoton mx-auto" onClick={handleAddToCart}>
                 <span className="IconContainer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -55,11 +79,13 @@ const ProductDetail = () => {
                   </svg>
                 </span>
                 <p className="texto">Add to Cart</p>
-              </button >
-            </div>
+              </button>
+        </div>
+        </div>
           </div>
         </div>
       </div>
+      
     </section>
   );
 };

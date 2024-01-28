@@ -61,7 +61,7 @@ const transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-      user: "alan.g.passarelli@gmail.com",
+      user: "mail@gmail.com",
       pass: process.env.PASSWORD_EMAIL,
     },
     tls: {
@@ -88,3 +88,4 @@ const transporter = nodemailer.createTransport({
   export const getUserByEmail = async (email) => {
     return userModel.findOne({ email });
   };
+

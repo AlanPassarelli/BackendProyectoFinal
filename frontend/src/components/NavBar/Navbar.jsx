@@ -42,7 +42,7 @@ const NavBar = () => {
         <Navbar key={expand} expand={expand} className="--nav">
           <Container fluid>
             <Navbar.Brand href="/" className="nav-brand">
-            Tienda
+            Tienda de Juegos
             </Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
             <Navbar.Offcanvas
@@ -59,6 +59,9 @@ const NavBar = () => {
                 <Nav className="justify-content-end flex-grow-1 pe-3">
                   <Link to="/productos" className="nav-item nav-link">
                     Productos
+                  </Link>
+                  <Link to="/admin" className="nav-item nav-link">
+                    administrador
                   </Link>
                   {isLogeado ? (
                     <Link>
@@ -79,10 +82,9 @@ const NavBar = () => {
                       </button>
                     </Link>
                   )}
-                  <Link to="/carts" className="shoppingBag">
-                    <button data-quantity="0" className="btn-cart">
+                  <Link to="/carrito" className="shoppingBag">
+                    <button className="btn-cart">
                       <FaBagShopping className="bolsa" />
-                      <span className="quantity"></span>
                     </button>
                   </Link>
                 </Nav>

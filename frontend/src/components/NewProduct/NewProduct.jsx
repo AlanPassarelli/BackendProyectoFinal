@@ -33,76 +33,11 @@ const NewProduct = () => {
     }
   };
 
-/*   return (
 
-      <form className="row g-3 needs-validation" novalidate>
-  <div className="">
-    <label htmlFor="validationCustom01" className="form-label">Titulo</label>
-    <input type="text" className="form-control" id="validationCustom01" required name="title"/>
-    <div className="valid-feedback">
-      Looks good!
-    </div>
-  </div>
-  <div className="">
-    <label htmlFor="validationCustom02" className="form-label">Descripcion</label>
-    <input type="text" className="form-control" id="validationCustom02" required name="description"/>
-    <div className="valid-feedback">
-      Looks good!
-    </div>
-  </div>
-  <div className="">
-    <label htmlFor="validationCustomUsername" className="form-label">Precio</label>
-    <div className="input-group has-validation">
-      <span className="input-group-text" id="inputGroupPrepend">$</span>
-      <input type="number" className="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required name="price"/>
-      <div className="invalid-feedback">
-        Please write the price.
-      </div>
-    </div>
-  </div>
-  <div className="">
-    <label htmlFor="validationCustom03" className="form-label">Code</label>
-    <input type="text" className="form-control" id="validationCustom03" required name="code"/>
-    <div className="invalid-feedback">
-      Please provide a valid code.
-    </div>
-  </div>
-  <div className="">
-    <label htmlFor="validationCustom04" className="form-label">Stock</label>
-    <input type="number" className="form-control" id="validationCustom04" required name="stock"/>
-    <div className="invalid-feedback">
-      Please select a valid state.
-    </div>
-  </div>
-  <div className="">
-    <label htmlFor="validationCustom05" className="form-label">Categoria</label>
-    <input type="text" className="form-control" id="validationCustom05" required name="category"/> 
-    <div className="invalid-feedback">
-      Please provide a valid zip.
-    </div>
-  </div>
-  <div className="col-12">
-    <div className="form-check">
-      <input className="form-check-input" type="checkbox" id="invalidCheck" required/>
-      <label className="form-check-label" htmlFor="invalidCheck">
-        Agree to terms and conditions
-      </label>
-      <div className="invalid-feedback">
-        You must agree before submitting.
-      </div>
-    </div>
-  </div>
-  <div className="">
-    <button className="btn btn-primary" type="submit">Submit form</button>
-  </div>
-</form>
-    
-    
-  ) */
 
   return (
     <Container className="container-form mt-3">
-      <h1 className="text-center m-3">Registro de Comic</h1>
+      <h1 className="text-center m-3">Registro de Juego de Mesa</h1>
       <Form
         onSubmit={handleSubmit}
         className=""
@@ -197,4 +132,3 @@ const NewProduct = () => {
 
 export default NewProduct;
 
-/* clase 15 03:31:37 */

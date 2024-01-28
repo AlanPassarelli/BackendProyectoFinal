@@ -1,74 +1,77 @@
+// ShoppingBag.jsx
 import React from "react";
 import "./ShoppingBag.scss";
-import { useCart } from "../context/cartContext";
+import { useCarrito } from "../CarritoContext";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const ShoppingBag = () => {
-  const { state: { cart }, dispatch } = useCart();
+  const { carrito, removeFromCarrito, incrementQuantity, decrementQuantity, clearCarrito, calcularTotal } = useCarrito();
 
-  const handleEmptyCart = () => {
-    dispatch({ type: "EMPTY_CART" });
+  const handleRemoveFromCarrito = (productId) => {
+    removeFromCarrito(productId);
+  };
+
+  const handleIncrementQuantity = (productId) => {
+    incrementQuantity(productId);
+  };
+
+  const handleDecrementQuantity = (productId) => {
+    decrementQuantity(productId);
+  };
+
+  const handleClearCarrito = () => {
+    clearCarrito();
+  };
+
+  const handleCompra = () => {
+    // Agrega la lógica para realizar la compra (llamar a la API, etc.)
+    console.log("Compra realizada. Total: $" + calcularTotal());
+    toast.success('¡Compra realizada con éxito!');
+    setTimeout(() => {
+      clearCarrito();
+      console.log("Carrito limpiado después de la compra");
+    }, 3000);
   };
 
   return (
-    <div>
-      <h2>Tienda</h2>
-      {cart.length === 0 ? (
-        <p>No hay productos en el carrito</p>
+    <div className="container-fluid">
+      <h2 className="carrito-title">CARRITO DE COMPRAS</h2>
+
+      {carrito.length === 0 ? (
+        <p>No hay productos en el carrito.</p>
       ) : (
-        <>
-          <ul>
-            {cart.map((product) => (
-              <li key={product._id}>
-                {product.title} - Precio: ${product.price}
-              </li>
-            ))}
-          </ul>
-          <button onClick={handleEmptyCart}>Vaciar Carrito</button>
-        </>
+        <div>
+          {carrito.map((producto) => (
+            <div key={producto.id} className="cart-item ">
+              <div className="row">
+                <div className="col-6">
+                  <img src={producto.thumbnails} alt={producto.title} className="img-fluid w-50" />
+                </div>
+                <div className="col-6">
+                  <p className="carrito-text">{producto.title}</p>
+                  <p className="carrito-text">Precio: ${producto.price}</p>
+                  <p className="carrito-text">Cantidad: {producto.quantity}</p>
+                  <button type="button" className="btn btn-warning" onClick={() => handleIncrementQuantity(producto.id)}>+</button>
+                  <button  className="btn btn-warning" onClick={() => handleDecrementQuantity(producto.id)}>-</button>
+                  <button  className="btn btn-danger"onClick={() => handleRemoveFromCarrito(producto.id)}>Eliminar</button>
+                </div>
+              </div>
+            </div>
+      ))}
+          <div className="cart-total">
+            <p>Total del carrito de compras: ${calcularTotal()}</p>
+          </div>
+
+          <div className="cart-actions">
+            <button className="btn btn-warning" onClick={handleClearCarrito}>Vaciar Carrito</button>
+            <button className="btn btn-success"onClick={handleCompra}>Realizar Compra</button>
+          </div>
+          <ToastContainer/>
+        </div>
       )}
     </div>
   );
 };
 
 export default ShoppingBag;
-
-// import React, { useEffect, useState } from "react";
-// import "./ShoppingBag.scss";
-// import { useCart } from "../context/cartContext";
-
-// const ShoppingBag = () => {
-//   const { state: { cart } } = useCart();
-//   const [carrito, setCarrito] = useState([]);
-
-//   useEffect(() => {
-//     // Hacer una solicitud para obtener el carrito desde la API
-//     fetch("http://localhost:8081/api/carts/")
-//       .then((response) => response.json())
-//       .then((data) => {
-//         // Actualizar el estado del carrito con los datos recibidos
-//         setCarrito(data.products || []);
-//       })
-//       .catch((error) => {
-//         console.log("Fetch error:", error);
-//       });
-//   }, [cart]); // Asegúrate de actualizar el carrito cuando cambie
-
-//   return (
-//     <div>
-//       <h2>Shopping Bag</h2>
-//       {carrito.length === 0 ? (
-//         <p>No hay productos en el carrito</p>
-//       ) : (
-//         <ul>
-//           {carrito.map((product) => (
-//             <li key={product._id}>
-//               {product.title} - Precio: ${product.price}
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ShoppingBag;
